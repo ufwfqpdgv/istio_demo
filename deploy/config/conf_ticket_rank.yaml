@@ -1,0 +1,32 @@
+Version:
+  Algorithm: samh_ticket_rank
+  Versions: 0.1.0
+
+Smh_ticket_rank_server:
+  Port: 11114
+
+Product_id: 1
+
+Comic_info_Mssql:
+  Host: 47.99.39.114 
+  Port: "3306"
+  User: recommend
+  Password: "R1QaL1^G0Fpv8^ZT"
+  Db_name: smh_customize
+  Table_name:
+    Comic: comic_sort_rank
+  Max_conns: 10
+  Time_out: 300
+
+Comic_rank_mysql:
+  Host: 47.99.39.114
+  Port: "3306"
+  User: recommend
+  Password: "R1QaL1^G0Fpv8^ZT"
+  Db_name: smh_customize
+  Table_name:
+    Month: Month
+  Max_conns: 10
+  Time_out: 300
+
+Sentry_dsn: "http://da3139a4014c431a9024a3b0b3eb9da7:c387db95d2384d83b594f984cf303420@47.99.39.114:9000/4"

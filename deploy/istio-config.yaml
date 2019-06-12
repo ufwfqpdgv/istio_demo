@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: smh-ticket-server
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: smh-ticket-server
+    spec:
+      containers:
+      - image: registry.cn-shenzhen.aliyuncs.com/smh-demo/smh-ticket-server:v0.1
+        imagePullPolicy: Always
+        name: smh-ticket-server
+        ports:
+        - containerPort: 11114
+        volumeMounts:
+        - name: smh-ticket-server-config-volume
+          mountPath: /server/config
+      volumes:
+      - name: smh-ticket-server-config-volume
+        configMap:
+          name: smh-ticket-server-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smh-ticket-server
+  labels:
+    k8s-svc: smh-ticket-server
+spec:
+  ports:
+  - port: 11114
+    protocol: TCP
+    name: http
+  selector:
+    k8s-app: smh-ticket-server
+---
+
+#gateway
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: smh-ticket-server-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: smh-ticket-server
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - smh-ticket-server-gateway
+  http:
+  - match:
+    - uri:
+        exact: /ticket/v1
+    route:
+    - destination:
+        host: smh-ticket-server
+        port:
+          number: 11114

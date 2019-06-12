@@ -1,0 +1,16 @@
+version: '2'
+services:
+  smh-ticket-server:
+    image: registry.cn-shenzhen.aliyuncs.com/smh-demo/smh-ticket-server:v0.1
+    container_name: smh-ticket-server
+    ports:
+      - 11114:11114
+# 如smh-ticket-server调用到samh-long-comic-server的服务，则加上depends_on
+    # depends_on:
+      # - samh-long-comic-server
+#多容器时
+  # samh-long-comic-server:
+    # image: registry.cn-shenzhen.aliyuncs.com/xndm-demo/samh_long_comic_server:latest
+    # container_name: samh-long-comic-server
+    # ports:
+      # - 9131:9131
